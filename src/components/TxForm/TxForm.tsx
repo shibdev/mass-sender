@@ -38,14 +38,18 @@ export function TxForm() {
 		const jetton_wallet_address = jetton_wallet_data.result[0].cell.beginParse().loadAddress();
 		var counter = Number(0);
 		var total_jetton_amount = Number(0);
-		Content.split('\n').map((line) => {
-			const [address, amount] = line.split(' ');
-			hashmap.set(BigInt(counter),
-				beginCell().storeAddress(Address.parse(address)).storeCoins(Number(amount) * 10 ** decimals).endCell()
-			);
-			counter += Number(1);
-			total_jetton_amount += Number(amount) * 10 ** decimals;
-			return { address, amount };
+		Content.split('\n').forEach((line) => {
+			const trimmedLine = line.trim();
+			if (trimmedLine) {
+				const [address, amount] = trimmedLine.split(',');
+				if (address && amount) {
+					hashmap.set(BigInt(counter),
+						beginCell().storeAddress(Address.parse(address)).storeCoins(Number(amount) * 10 ** decimals).endCell()
+					);
+					counter += Number(1);
+					total_jetton_amount += Number(amount) * 10 ** decimals;
+				}
+			}
 		});
 
 		const jetton_transfer_body =
@@ -80,6 +84,19 @@ export function TxForm() {
 		tx.validUntil = Math.floor(Date.now() / 1000) + 600;
 		tonConnectUi.sendTransaction(tx);
 		tx.messages = [];
+	};
+
+	const preventSpaces = (event) => {
+		if (event.key === ' ') {
+			event.preventDefault();
+		}
+	};
+
+	const handlePaste = (event) => {
+		const paste = (event.clipboardData || window.clipboardData).getData('text');
+		if (paste.includes(' ')) {
+			event.preventDefault();
+		}
 	};
 
 	const inputStyle = {
@@ -117,15 +134,19 @@ export function TxForm() {
 				placeholder="Enter token address"
 				value={tx.tokenAddress}
 				onChange={(e) => setTx({ ...tx, tokenAddress: e.target.value })}
+				onKeyDown={preventSpaces}
+				onPaste={handlePaste}
 				style={inputStyle}
 			/>
 			<h3>Address list</h3>
 			<textarea
 				placeholder="Enter addresses and amounts in the format:
-address1 amount1
-address2 amount2"
+address1,amount1
+address2,amount2"
 				value={Content}
 				onChange={(e) => setContent(e.target.value)}
+				onKeyDown={preventSpaces}
+				onPaste={handlePaste}
 				style={csvAreaStyle}
 			/>
 			{wallet ? (
