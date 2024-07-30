@@ -1,9 +1,9 @@
-import {TonConnectButton} from "@tonconnect/ui-react";
-import './header.scss';
+import "./header.scss";
 
 export const Header = () => {
-    return <header>
-        <span>Fintopio Sender</span>
-        <TonConnectButton />
+  return (
+    <header className="header">
+      <span className="header__title">Fintopio Sender</span>
     </header>
-}
+  );
+};

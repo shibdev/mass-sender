@@ -1,0 +1,28 @@
+.button {
+    border: none;
+    padding: 14px 16px;
+    min-width: 200px;
+    width: 100%;
+    background: none;
+    font-size: 16px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.1s ease-in-out;
+    cursor: pointer;
+
+    &__gradient {
+        background: linear-gradient(270.95deg, #18a6ff .53%, #6e4bff 99.57%);
+        border-radius: 16px;
+    }
+
+    &:hover {
+        transform: scale(1.03);
+    }
+
+    &:active {
+        transform: scale(0.97);
+    }
+}
