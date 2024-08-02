@@ -15,7 +15,7 @@ const defaultTx: SendTransactionRequest = {
 };
 
 const tonClient = new TonClient4({
-  endpoint: "https://testnet-v4.tonhubapi.com",
+  endpoint: "https://mainnet-v4.tonhubapi.com",
 });
 
 export function TxForm() {
@@ -31,7 +31,7 @@ export function TxForm() {
     );
     const block = await tonClient.getLastBlock();
     const request = await fetch(
-      `https://testnet.toncenter.com/api/v3/jetton/masters?address=${tx.tokenAddress}`
+      `https://toncenter.com/api/v3/jetton/masters?address=${tx.tokenAddress}`
     );
     const jetton_data = await request.json();
 
@@ -79,7 +79,7 @@ export function TxForm() {
       .storeUint(0, 64)
       .storeCoins(total_jetton_amount)
       .storeAddress(
-        Address.parse("EQB-njcWloLO1V1lt0wIB2hPSQMi627k0uyAdFMtau90bHMp")
+        Address.parse("EQA_U8vtwX88cxJiCJRP7xIjveYX_bmJYLKLJkFABg2hDVvX")
       )
       .storeAddress(Address.parse(tonConnectUi.account?.address ?? ""))
       .storeBit(0)
@@ -88,7 +88,6 @@ export function TxForm() {
       .storeRef(
         beginCell()
           .storeDict(hashmap)
-          .storeRef(beginCell().storeStringTail("test").endCell())
           .endCell()
       )
       .endCell();
